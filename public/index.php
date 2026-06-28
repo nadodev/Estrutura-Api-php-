@@ -45,23 +45,25 @@ try {
             ], 405);
             break;
 
-        case Dispatcher::FOUND:
-            [$controllerClass, $method] = $routeInfo[1];
+  case Dispatcher::FOUND:
+    [$controllerClass, $method] = $routeInfo[1];
 
-            $routeParams = $routeInfo[2];
-            $request = Request::capture();
+    $routeParams = $routeInfo[2];
+    $request = Request::capture();
 
-            $controller = new $controllerClass();
+    $request->setRouteParams($routeParams);
 
-            $response = $controller->{$method}($request, $routeParams);
+    $controller = new $controllerClass();
 
-            if ($response instanceof JsonResponse) {
-                $response->emit();
-                break;
-            }
+    $response = $controller->{$method}($request);
 
-            JsonResponse::send($response);
-            break;
+    if ($response instanceof JsonResponse) {
+        $response->emit();
+        break;
+    }
+
+    JsonResponse::send($response);
+    break;
     }
 } catch (Throwable $exception) {
     ErrorHandler::handle($exception);

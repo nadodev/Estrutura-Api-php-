@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace App\Shared\Http;
 
-final readonly class Request
+final class Request
 {
     public function __construct(
         public array $query,
         public array $body,
         public array $server,
-        public array $headers
+        public array $headers,
+        private array $routeParams = [],
     ) {}
 
     public static function capture(): self
@@ -27,13 +28,28 @@ final readonly class Request
             query: $_GET,
             body: $body,
             server: $_SERVER,
-            headers: self::headers()
+            headers: self::headers(),
         );
     }
 
     public function input(string $key, mixed $default = null): mixed
     {
         return $this->body[$key] ?? $this->query[$key] ?? $default;
+    }
+
+    public function setRouteParams(array $params): void
+    {
+        $this->routeParams = $params;
+    }
+
+    public function route(string $key, mixed $default = null): mixed
+    {
+        return $this->routeParams[$key] ?? $default;
+    }
+
+    public function allRouteParams(): array
+    {
+        return $this->routeParams;
     }
 
     public function bearerToken(): ?string
