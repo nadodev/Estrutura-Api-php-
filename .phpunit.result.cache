@@ -1,0 +1,1 @@
+{"version":2,"defects":[],"times":{"Tests\\Feature\\HealthRouteTest::testHealthRouteIsRegistered":0.005,"Tests\\Feature\\HealthRouteTest::testHealthRouteReturnsOk":0.002,"Tests\\Feature\\UsersRouteTest::testUsersRoutesAreRegistered":0.001,"Tests\\Feature\\UsersRouteTest::testUserCrudWorkflow":0.354}}
