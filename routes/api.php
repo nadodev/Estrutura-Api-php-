@@ -11,4 +11,6 @@ return function (RouteCollector $router): void {
     $router->addRoute('GET', '/api/users', [UserController::class, 'index']);
     $router->addRoute('GET', '/api/users/{id}', [UserController::class, 'show']);
     $router->addRoute('POST', '/api/users', [UserController::class, 'store']);
+    $router->addRoute('DELETE', '/api/users/{id}', [UserController::class, 'destroy']);
+    $router->addRoute('PUT', '/api/users/{id}', [UserController::class, 'update']);
 };

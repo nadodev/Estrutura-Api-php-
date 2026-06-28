@@ -52,4 +52,47 @@ final class UserController
             'user' => $user->toArray(),
         ];
     }
+
+    public function destroy(Request $request): array
+    {
+        $id = (int) $request->route('id');
+
+        $user = User::find($id);
+
+        if (! $user) {
+            return [
+                'message' => 'Usuário não encontrado.',
+            ];
+        }
+
+        $user->delete();
+
+        return [
+            'message' => 'Usuário excluído com sucesso.',
+        ];
+    }
+
+    public function update(Request $request): array
+    {
+        $id = (int) $request->route('id');
+
+        $user = User::find($id);
+
+        if (! $user) {
+            return [
+                'message' => 'Usuário não encontrado.',
+            ];
+        }
+
+        $user->update([
+            'name' => $request->input('name', $user->name),
+            'email' => $request->input('email', $user->email),
+            'password' => password_hash($request->input('password', ''), PASSWORD_DEFAULT),
+        ]);
+
+        return [
+            'message' => 'Usuário atualizado com sucesso.',
+            'user' => $user->toArray(),
+        ];
+    }
 }
