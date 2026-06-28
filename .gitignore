@@ -1,7 +1,6 @@
 .env
 .env.*
 !.env.example
-Readme.md
 ./vendor
 vendor
 vendor/composer/
