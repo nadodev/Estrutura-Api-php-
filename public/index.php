@@ -15,6 +15,8 @@ require dirname(__DIR__) . '/vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
 $dotenv->safeLoad();
 
+$container = require dirname(__DIR__) . '/bootstrap/container.php';
+
 Cors::handle();
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -45,25 +47,25 @@ try {
             ], 405);
             break;
 
-  case Dispatcher::FOUND:
-    [$controllerClass, $method] = $routeInfo[1];
+        case Dispatcher::FOUND:
+            [$controllerClass, $method] = $routeInfo[1];
 
-    $routeParams = $routeInfo[2];
-    $request = Request::capture();
+            $routeParams = $routeInfo[2];
 
-    $request->setRouteParams($routeParams);
+            $request = Request::capture();
+            $request->setRouteParams($routeParams);
 
-    $controller = new $controllerClass();
+            $controller = $container->make($controllerClass);
 
-    $response = $controller->{$method}($request);
+            $response = $controller->{$method}($request);
 
-    if ($response instanceof JsonResponse) {
-        $response->emit();
-        break;
-    }
+            if ($response instanceof JsonResponse) {
+                $response->emit();
+                break;
+            }
 
-    JsonResponse::send($response);
-    break;
+            JsonResponse::send($response);
+            break;
     }
 } catch (Throwable $exception) {
     ErrorHandler::handle($exception);
