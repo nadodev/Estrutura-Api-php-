@@ -2,3 +2,7 @@
 .env.*
 !.env.example
 Readme.md
+./vendor
+vendor
+vendor/composer/
+composer.lock
